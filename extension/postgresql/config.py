@@ -19,10 +19,10 @@ table_dict = {
         },
     'dialogs':
         {
-            'start': 'text',
-            'help': 'text',
-            'info': 'text',
-            'worker': 'text',
-            'reference': 'text'
+            'lang': 'varchar(2)',
+            'greeting': 'text',
+            'help_information': 'text',
+            'work_information': 'text',
+            'reference_work': 'text'
         }
 }
