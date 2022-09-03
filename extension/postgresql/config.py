@@ -19,7 +19,7 @@ table_dict = {
         },
     'dialogs':
         {
-            'lang': 'varchar(2)',
+            'lang': 'varchar(2) PRIMARY KEY',
             'greeting': 'text',
             'help_information': 'text',
             'work_information': 'text',

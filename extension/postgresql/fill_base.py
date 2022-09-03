@@ -1,5 +1,7 @@
 import psycopg2
 import config
+from data.dialogs import message
+import aiogram.utils.markdown as fmt
 
 
 #  Попытка подключения к серверу Конфигурационный файл config.py
@@ -13,13 +15,10 @@ try:
     )
 
     with connection.cursor() as cursor:
-        for table in config.table_dict:
-            print(table)
-            cursor.execute(
-                f'''DROP TABLE {table}'''
+        cursor.execute(
+                f'''INSERT INTO dialogs (lang, greeting) VALUES ('ru', '{message['ru']['greeting']}')'''
             )
-            connection.commit()
-        print('База данных удалена')
+        connection.commit()
 
 except Exception as ex:
     print("Ошибка подключения к серверу")
