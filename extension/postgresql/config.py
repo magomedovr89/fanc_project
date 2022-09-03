@@ -14,8 +14,7 @@ table_dict = {
             'is_bot': 'boolean',
             'first_name': 'varchar(50)',
             'username': 'varchar(50)',
-            'language_code': 'varchar(3)',
-            'is_premium': 'boolean'
+            'language_code': 'varchar(3)'
         },
     'dialogs':
         {
