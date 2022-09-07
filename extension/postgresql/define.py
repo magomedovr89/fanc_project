@@ -1,3 +1,4 @@
+from config import table_dict
 def create_request(dictionary):
     requests_list = []
     for table_name in dictionary:
@@ -14,3 +15,4 @@ def create_request(dictionary):
 
 
 
+print(create_request(table_dict))

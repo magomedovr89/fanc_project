@@ -1,5 +1,5 @@
 import psycopg2
-import config
+import extension.postgresql.config as config
 
 
 #  Попытка подключения к серверу Конфигурационный файл config.py
@@ -13,13 +13,14 @@ try:
     )
 
     with connection.cursor() as cursor:
-        for table in config.table_dict:
-            print(table)
-            cursor.execute(
-                f'''DROP TABLE {table}'''
-            )
-            connection.commit()
-        print('База данных удалена')
+        if input('База данных будет очищена. Вы уверены? (Y / N) ').lower() in ('y', 'yes', 'да', 'д'):
+            for table in config.table_dict:
+                cursor.execute(f'''DROP TABLE {table}''')
+                connection.commit()
+                print(f'Таблица {table} удалена')
+            print('База данных полностью очищена')
+        else:
+            print('Операция отменена')
 
 except Exception as ex:
     print("Ошибка подключения к серверу")
