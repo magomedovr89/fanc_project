@@ -3,55 +3,24 @@ import logging
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types import ContentType
 import aiogram.utils.markdown as fmt
-from define import user_data_to_database
+from extension.postgresql.primary_executor import Database_primary_executor
 
-
-
-
-
-import psycopg2
-import config
-
-
-#  Попытка подключения к серверу Конфигурационный файл config.py
-#  !!!Порт по умолчанию!!!
-try:
-    connection = psycopg2.connect(
-        dbname=config.dbname,
-        user=config.user,
-        password=config.password,
-        host=config.host
-    )
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            f'''SELECT greeting FROM dialogs WHERE lang = 'ru' '''
-        )
-
-        xxx = cursor.fetchall()
-
-except Exception as ex:
-    print("Ошибка подключения к серверу")
-
-finally:
-    if connection:
-        connection.close()
-        print("Подключение закрыто")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 logging.basicConfig(level=logging.INFO)
+db = Database_primary_executor()
+
 
 @dp.message_handler(commands="start")
 async def cmd_test1(message: types.Message):
-    print(message.from_user)
-    user_data_to_database(message.from_user)
-    await message.reply(xxx[0][0])
+    db.insert_user_info(message.from_user)
+    await message.reply(db.extract(table='dialogs_bot', column='greeting', column_key='language', key_value='ru'))
 
 
 @dp.message_handler(commands="help")
 async def cmd_test1(message: types.Message):
-    await message.reply(ms['help'])
+    await message.reply(db.extract(table='dialogs_bot', column='greeting', column_key='language', key_value='ru'))
 
 
 @dp.message_handler(commands="info")
@@ -75,6 +44,7 @@ async def cmd_reference(message: types.Message):
         f"видеозвонки на WebRTC!\n\nP.S. а ещё ходят слухи про демонстрацию своего экрана :)",
         parse_mode=types.ParseMode.HTML)
 
+
 @dp.message_handler(content_types=ContentType.PHOTO)
 async def send_photo_file_id(message: types.input_media):
     unique_id = (message.photo[-1]['file_id'])
@@ -84,5 +54,3 @@ async def send_photo_file_id(message: types.input_media):
 
 
 executor.start_polling(dp)
-
-

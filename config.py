@@ -7,3 +7,4 @@ PORT_DB = '5432'
 SQL_TYPE = 'postgresql'
 
 admin_telegram = 'HECBR'
+TOKEN = "5576400014:AAHsD2VOAmjLYNSZJX9tN6vUrXBODOxet3k"
