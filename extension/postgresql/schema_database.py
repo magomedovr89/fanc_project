@@ -17,8 +17,8 @@ class Database_processing():
             Column('user_id', Integer, primary_key=True),
             Column('is_bot', Boolean),
             Column('first_name', String(250)),
-            Column('username', String(50)),
-            Column('language_code', String(3)),
+            Column('username', String(250)),
+            Column('language_code', String(2)),
             Column('first_connect', DateTime)
         )
         self.materials = Table(
@@ -110,3 +110,10 @@ class Database_processing():
                                                    information=dialogs_on_language[lang]['information'])
             print(ins)
             self.conn.execute(ins)
+
+
+x = Database_processing()
+x.clear_all_to_db()
+x.create_all_to_bd()
+x.fill_db()
+x.fill_table()

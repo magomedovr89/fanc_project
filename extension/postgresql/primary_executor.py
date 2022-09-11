@@ -39,14 +39,21 @@ class Database_primary_executor():
                 print("Ошибка подключения, проверьте параметры")
         self.connected = self.engine.connect()
 
-    def check_db_base(self, table, column):
+    def check_db_base(self, table):
         inspector = inspect(self.engine)
         print((inspector.get_columns(table, schema='public')[0]['name']))
         return table == (inspector.get_columns(table, schema='public')[0]['name'])
 
-    def extract(self, table, column, column_key, key_value):
-        return \
-            self.connected.execute(f'SELECT {column} FROM {table} WHERE "{column_key}" = \'{key_value}\'').fetchone()[0]
+    def extract(self, user_info, column):
+
+        return self.connected.execute(f'SELECT * FROM users;'
+                                      f'WITH '
+                                      f'user_lang AS ('
+                                      f'select * FROM users WHERE user_id = {user_info.id}'
+                                      f')'
+                                      f'SELECT dialogs_bot.{column} '
+                                      f'FROM dialogs_bot LEFT OUTER JOIN user_lang ON dialogs_bot."language" = user_lang.language_code '
+                                      f'WHERE dialogs_bot."language" = user_lang.language_code').fetchone()[0]
 
     def user_check(self, user_id):
         return self.connected.execute(f'SELECT EXISTS (SELECT * FROM users WHERE user_id = {user_id})').fetchone()[0]
