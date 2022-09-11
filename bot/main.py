@@ -5,12 +5,12 @@ from aiogram.types import ContentType
 import aiogram.utils.markdown as fmt
 from extension.postgresql.primary_executor import Database_primary_executor
 
-
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 logging.basicConfig(level=logging.INFO)
 
 db = Database_primary_executor()
+
 
 @dp.message_handler(commands="start")
 async def cmd_start(message: types.Message):
@@ -35,7 +35,8 @@ async def cmd_reference(message: types.Message):
 
 @dp.message_handler(content_types=ContentType.PHOTO)
 async def send_photo_file_id(message: types.input_media):
-    await message.photo[-1].download(f'media/{id_user}/{unique_id}.jpg')
+    db.write_materials(message.from_user, message.photo[-1])
+    await message.photo[-1].download(f'media/{message.from_user.id}/{message.photo[-1].file_unique_id}.jpg')
 
 
 executor.start_polling(dp, skip_updates=True)

@@ -76,3 +76,10 @@ class Database_primary_executor():
                                    f'\'{arr.username}\', '
                                    f'\'{arr.language_code}\', '
                                    f'\'{datetime.now()}\')')
+
+
+    def write_materials(self, user_info, photo_id):
+        self.connected.execute(f'INSERT INTO materials '
+                               f'(user_id, id_material, created_datetime) '
+                               f'VALUES '
+                               f'({user_info.id}, \'{photo_id.file_unique_id}\', \'{datetime.now()}\')')
